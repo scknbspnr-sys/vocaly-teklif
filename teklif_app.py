@@ -7,6 +7,34 @@ import urllib.parse
 import ssl
 import time
 
+# --- SSL & DOWNLOAD HELPER ---
+try:
+    ssl_context = ssl._create_unverified_context()
+except AttributeError:
+    ssl_context = None
+
+def download_file(url, filename):
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(
+                url, 
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+            )
+            with urllib.request.urlopen(req, context=ssl_context) as response, open(filename, 'wb') as out_file:
+                out_file.write(response.read())
+            return True
+        except Exception as e:
+            print(f"Hata: {filename} indirilemedi ({attempt+1}). {e}")
+            time.sleep(1)
+    return False
+
+# Logo İndir (Uygulama Başlangıcında)
+logo_url = "https://vocaly.com.tr/wp-content/uploads/2026/01/cropped-VOCALY-KARAOKE-Virtual-Logo4-2-136x138.png"
+logo_file = "logo.png"
+if not os.path.exists(logo_file):
+     download_file(logo_url, logo_file)
+
 # --- 1. ENVANTER VE FİYAT LİSTESİ ---
 envanter = {
     "45000 Hazır Karaoke Şarkı": {"fiyat": 3000, "link": ""},
@@ -274,14 +302,14 @@ def teklif_pdf_olustur(musteri_adi, tarih, secilenler, liste_toplami, net_fiyat,
 
 # --- 3. STREAMLIT WEB ARAYÜZÜ ---
 if __name__ == "__main__":
-    st.set_page_config(page_title="Vocaly Teklif Üretici", layout="centered")
+    st.set_page_config(page_title="Vocaly Teklif Üretici", page_icon="logo.png", layout="centered")
 
     # --- PWA & MOBİL UYGULAMA AYARLARI ---
     st.markdown("""
         <!-- iOS PWA Meta Etiketleri -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1516280440502-a2fe44605174?w=800&q=80">
+        <link rel="apple-touch-icon" href="logo.png">
 
         <!-- Mobil Arayüz Optimizasyonu (CSS) -->
         <style>
@@ -299,7 +327,7 @@ if __name__ == "__main__":
         </style>
     """, unsafe_allow_html=True)
     
-    st.image("https://images.unsplash.com/photo-1516280440502-a2fe44605174?w=800&q=80", use_column_width=True)
+    st.image("logo.png", width=150)
     st.title("🎤 Vocaly Teklif Sistemi")
 
     col1, col2 = st.columns(2)
