@@ -302,14 +302,14 @@ def teklif_pdf_olustur(musteri_adi, tarih, secilenler, liste_toplami, net_fiyat,
 
 # --- 3. STREAMLIT WEB ARAYÜZÜ ---
 if __name__ == "__main__":
-    st.set_page_config(page_title="Vocaly Teklif Üretici", page_icon="logo.png", layout="centered")
+    st.set_page_config(page_title="Vocaly Teklif", page_icon="logo.png", layout="centered")
 
     # --- PWA & MOBİL UYGULAMA AYARLARI ---
     st.markdown("""
         <!-- iOS PWA Meta Etiketleri -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <link rel="apple-touch-icon" href="logo.png">
+        <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/scknbspnr-sys/vocaly-teklif/main/logo.png">
 
         <!-- Mobil Arayüz Optimizasyonu (CSS) -->
         <style>
